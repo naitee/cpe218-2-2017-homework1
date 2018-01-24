@@ -1,21 +1,26 @@
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Stack;
 import java.util.Scanner;
 public class Homework1 {
 	public static Node ChristmasTree;
 	static Stack<Character> StackToTree = new Stack<Character>();
-
+	public static ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
 		String problem = input.nextLine();
 		for (int i = 0; i < problem.length(); i++) {
 			StackToTree.add(problem.charAt(i));
 		}
+		PrintStream ps = new PrintStream(baos);
+		PrintStream old = System.out;
+		System.setOut(ps);
 		ChristmasTree = new Node(StackToTree.pop());
 		Infix(ChristmasTree);
 		inorder(ChristmasTree);
 		System.out.print("=");
 		System.out.print(Calculate(ChristmasTree));
-		//TreeGUI.main(args);
+		TreeGUI.main(args);
 	}
 
 	public static void inorder(Node TreeToString) {

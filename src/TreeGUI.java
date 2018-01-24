@@ -17,6 +17,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultTreeCellRenderer;
+
 public class TreeGUI extends JPanel implements TreeSelectionListener {
     private JEditorPane htmlPane;
     private JTree tree;
@@ -62,7 +63,6 @@ public class TreeGUI extends JPanel implements TreeSelectionListener {
         //Create the HTML viewing pane.
         htmlPane = new JEditorPane();
         htmlPane.setEditable(false);
-        initHelp();
         JScrollPane htmlView = new JScrollPane(htmlPane);
 
         //Add the scroll panes to a split pane.
@@ -93,15 +93,17 @@ public class TreeGUI extends JPanel implements TreeSelectionListener {
                 tree.getLastSelectedPathComponent();
 
         if (node == null) return;
-
+        Homework1.baos.reset();
         Object nodeInfo = node.getUserObject();
-        Node Update = (Node)nodeInfo;
+        Homework1.Node Update = (Homework1.Node)nodeInfo;
         Homework1.inorder(Update);
-        if(node.isLeaf()==true){
-            htmlPane.setText(node.toString());
+        if(node.isLeaf()){
+            htmlPane.setText(Homework1.baos.toString());
             System.out.println(" ");
         }else{
-            htmlPane.setText(node.children().toString());
+            System.out.print("="+Homework1.Calculate(Update));
+            htmlPane.setText(Homework1.baos.toString());
+
             System.out.println(" ");
         }
 
@@ -149,25 +151,16 @@ public class TreeGUI extends JPanel implements TreeSelectionListener {
 
     }
 
-    private void initHelp() {
-        String s = "TreeDemoHelp.html";
-        helpURL = getClass().getResource(s);
-        if (helpURL == null) {
-            System.err.println("Couldn't open help file: " + s);
-        } else if (DEBUG) {
-            System.out.println("Help URL is " + helpURL);
-        }
-    }
 
 
-    private void createNodes(DefaultMutableTreeNode box,Node GG) {
-        if(GG.operate == '-'|| GG.operate == '/'|| GG.operate == '*'|| GG.operate == '+'){
-            DefaultMutableTreeNode category = new DefaultMutableTreeNode(GG.left);
+    private void createNodes(DefaultMutableTreeNode box, Homework1.Node gg) {
+        if(gg.operate == '-'|| gg.operate == '/'|| gg.operate == '*'|| gg.operate == '+'){
+            DefaultMutableTreeNode category = new DefaultMutableTreeNode(gg.left);
             box.add(category);
-            createNodes(category,GG.left);
-            category = new DefaultMutableTreeNode(GG.right);
+            createNodes(category,gg.left);
+            category = new DefaultMutableTreeNode(gg.right);
             box.add(category);
-            createNodes(category,GG.right);
+            createNodes(category,gg.right);
         }
 
     }
@@ -188,7 +181,7 @@ public class TreeGUI extends JPanel implements TreeSelectionListener {
         }
 
         //Create and set up the window.
-        JFrame frame = new JFrame("TreeGUI");
+        JFrame frame = new JFrame("Binary Search Tree");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Add content to the window.
